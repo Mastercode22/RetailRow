@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cart Debug Test</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cart.css">
+</head>
+
+<body>
+    <h1>Cart Debug Test</h1>
+
+    <!-- Minimal cart UI -->
+    <button id="cartToggle">Open Cart</button>
+
+    <aside id="cartPanel" class="cart-panel" aria-hidden="true">
+        <div class="cart-header">
+            <h3>Cart Summary</h3>
+            <button id="closeCart">✕</button>
+        </div>
+        <div class="cart-body" id="cartList">
+            <p class="cart-empty">Your cart is empty - INITIAL</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-subtotal">Subtotal: GH₵ <span id="subtotal">0.00</span></div>
+            <a href="checkout.php" class="cart-checkout">CHECKOUT (GH₵ <span id="checkoutTotal">0.00</span>)</a>
+        </div>
+    </aside>
+
+    <div id="overlay" class="overlay" aria-hidden="true"></div>
+
+    <script>
+        // Add test item to cart session manually
+        fetch('api/cart/add.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id: 1, quantity: 1 })
+        }).then(r => r.json()).then(d => {
+            console.log('Add to cart response:', d);
+        });
+
+        // Test API response
+        fetch('api/cart/get.php')
+            .then(r => {
+                console.log('Response status:', r.status);
+                console.log('Response headers:', r.headers);
+                return r.json();
+            })
+            .then(data => {
+                console.log('Cart API Response:', data);
+                document.getElementById('cartList').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                document.getElementById('cartList').innerHTML = '<p style="color:red;">Error: ' + err.message + '</p>';
+            });
+    </script>
+
+    <script src="js/cart.js"></script>
+</body>
+
+</html>
