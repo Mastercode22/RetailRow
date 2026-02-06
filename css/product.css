@@ -148,7 +148,7 @@
 
 .product-info .category {
     font-size: 14px;
-    color: var(--jumia-gray);
+    color: white;
     margin-bottom: 16px;
     display: inline-flex;
     align-items: center;
@@ -270,7 +270,7 @@
 .product-info .description {
     font-size: 15px;
     line-height: 1.7;
-    color: #424242;
+    color: #fffcfc;
     margin-bottom: 32px;
 }
 
