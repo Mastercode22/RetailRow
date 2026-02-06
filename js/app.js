@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeCarousel();
     initializeFlashTimer();
     initializeScrollControls();
-    initializeCart();
+    // initializeCart(); // Handled by cart.js
     initializeMobileMenu();
     initializeSearch();
     initializeBackToTop();
@@ -530,6 +530,7 @@ function initializeScrollControls() {
 /**
  * Initialize cart functionality
  */
+/*
 function initializeCart() {
     const cartToggle = document.getElementById('cartToggle');
     const cartPanel = document.getElementById('cartPanel');
@@ -570,6 +571,7 @@ function initializeCart() {
         }
     });
 }
+*/
 
 /**
  * Add product to cart

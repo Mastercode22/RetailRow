@@ -117,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    /*
     // Cart panel
     const cartToggle = document.getElementById('cartToggle');
     const cartPanel = document.getElementById('cartPanel');
@@ -149,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showOverlay(false);
         });
     }
+    */
 
     // Mobile drawer
     const hamburger = document.getElementById('hamburger');
@@ -178,10 +180,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Overlay click closes both
     if (overlay) {
         overlay.addEventListener('click', () => {
+            /*
             if (cartPanel) {
                 cartPanel.classList.remove('open');
                 cartPanel.setAttribute('aria-hidden', 'true');
             }
+            */
             if (mobileDrawer) {
                 mobileDrawer.classList.remove('open');
                 mobileDrawer.setAttribute('aria-hidden', 'true');
@@ -204,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    /*
     // Simulate add to cart (demo)
     const cartList = document.getElementById('cartList');
     const subtotalEl = document.getElementById('subtotal');
@@ -247,14 +252,17 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+    */
 
     // Close with Escape key
     window.addEventListener('keyup', e => {
         if (e.key === 'Escape') {
+            /*
             if (cartPanel) {
                 cartPanel.classList.remove('open');
                 cartPanel.setAttribute('aria-hidden', 'true');
             }
+            */
             if (mobileDrawer) {
                 mobileDrawer.classList.remove('open');
                 mobileDrawer.setAttribute('aria-hidden', 'true');
