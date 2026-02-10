@@ -50,11 +50,7 @@
     height: 100%;
     object-fit: contain;
     padding: 24px;
-    transition: transform var(--transition-smooth);
-}
-
-.main-image:hover img {
-    transform: scale(1.05);
+    transition: transform 0.1s ease-out;
 }
 
 /* Badge on main image */

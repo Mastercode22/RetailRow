@@ -80,26 +80,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Make flash scroll draggable (mouse)
     if (flashScroll) {
-        let isDown = false, startX, scrollLeftPos;
+        let isDown = false, startX, scrollLeftPos, isDragging = false;
 
         flashScroll.addEventListener('mousedown', e => {
             isDown = true;
+            isDragging = false;
             flashScroll.style.cursor = 'grabbing';
             startX = e.pageX - flashScroll.offsetLeft;
             scrollLeftPos = flashScroll.scrollLeft;
         });
 
-        window.addEventListener('mouseup', () => {
+        window.addEventListener('mouseup', (e) => {
             isDown = false;
             flashScroll.style.cursor = 'grab';
+
+            if (isDragging) {
+                const preventClick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.removeEventListener('click', preventClick, true);
+                };
+                window.addEventListener('click', preventClick, true);
+            }
+            isDragging = false;
         });
 
         flashScroll.addEventListener('mousemove', e => {
             if (!isDown) return;
-            e.preventDefault();
             const x = e.pageX - flashScroll.offsetLeft;
             const walk = (x - startX);
-            flashScroll.scrollLeft = scrollLeftPos - walk;
+
+            if (Math.abs(walk) > 5) {
+                isDragging = true;
+                e.preventDefault();
+                flashScroll.scrollLeft = scrollLeftPos - walk;
+            }
         });
 
         // Touch support
@@ -203,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         wa.addEventListener('click', (e) => {
             e.preventDefault();
             const msg = encodeURIComponent('Hello, I need support with RetailRow Ghana.');
-            const url = `https://wa.me/233000000000?text=${msg}`;
+            const url = `https://wa.me/233506552368?text=${msg}`;
             window.open(url, '_blank');
         });
     }
@@ -287,6 +302,77 @@ document.addEventListener('DOMContentLoaded', () => {
 
         backToTop.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // Search Auto-suggest
+    const searchInput = document.getElementById('searchInput');
+    const suggestionsBox = document.getElementById('searchSuggestions');
+
+    if (searchInput && suggestionsBox) {
+        let debounceTimer;
+
+        searchInput.addEventListener('input', function () {
+            const query = this.value.trim();
+
+            clearTimeout(debounceTimer);
+
+            if (query.length < 2) {
+                suggestionsBox.classList.remove('show');
+                suggestionsBox.innerHTML = '';
+                return;
+            }
+
+            // Debounce to prevent too many API calls
+            debounceTimer = setTimeout(() => {
+                fetch(`api/search_suggestions.php?q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.data.length > 0) {
+                            const html = data.data.map(product => `
+                                <div class="suggestion-item" onclick="window.location.href='product.php?id=${product.id}'">
+                                    <img src="${product.image || 'assets/images/placeholder.jpg'}" class="suggestion-image" alt="${product.name}">
+                                    <div class="suggestion-info">
+                                        <div class="suggestion-name">${product.name}</div>
+                                        <div class="suggestion-price">GH₵ ${parseFloat(product.price).toFixed(2)}</div>
+                                    </div>
+                                </div>
+                            `).join('');
+                            suggestionsBox.innerHTML = html;
+                            suggestionsBox.classList.add('show');
+                        } else {
+                            suggestionsBox.classList.remove('show');
+                        }
+                    })
+                    .catch(err => console.error('Search suggestion error:', err));
+            }, 300);
+        });
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                suggestionsBox.classList.remove('show');
+            }
+        });
+    }
+
+    // Product Image Zoom
+    const zoomContainer = document.querySelector('.product-zoom-container');
+    const zoomImage = document.querySelector('.product-zoom-image');
+
+    if (zoomContainer && zoomImage) {
+        zoomContainer.addEventListener('mousemove', function (e) {
+            const { left, top, width, height } = this.getBoundingClientRect();
+            const x = (e.clientX - left) / width * 100;
+            const y = (e.clientY - top) / height * 100;
+
+            zoomImage.style.transformOrigin = `${x}% ${y}%`;
+            zoomImage.style.transform = 'scale(2)';
+        });
+
+        zoomContainer.addEventListener('mouseleave', function () {
+            zoomImage.style.transformOrigin = 'center center';
+            zoomImage.style.transform = 'scale(1)';
         });
     }
 });

@@ -89,9 +89,6 @@ function create_order() {
         ";
         $order_stmt = $db->prepare($order_query);
 
-        // This needs to be implemented properly with user sessions
-        $user_id = null; // Placeholder
-        session_start();
         $session_id = session_id();
 
         $order_stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);

@@ -14,7 +14,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 switch ($method) {
     case 'GET':
         // Get active flash sales with product details
-        $query = "SELECT fs.id, fs.title, fs.discount_percentage, fs.end_date, p.id as product_id, p.name, p.price, p.old_price, p.image, p.stock
+        $query = "SELECT fs.id as flash_sale_id, fs.title, fs.discount_percentage, fs.end_date, p.id, p.name, p.price, p.old_price, p.image, p.stock
                  FROM flash_sales fs
                  INNER JOIN products p ON fs.product_id = p.id
                  WHERE fs.is_active = 1 AND fs.end_date > NOW() AND p.is_active = 1

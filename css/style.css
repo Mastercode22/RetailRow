@@ -197,6 +197,7 @@ button {
 .nav-search {
     flex: 1;
     max-width: 700px;
+    position: relative;
 }
 
 .search-form {
@@ -231,6 +232,69 @@ button {
     background: #e67e0e;
 }
 
+/* Search Suggestions */
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid var(--jumia-orange);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    display: none;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.search-suggestions.show {
+    display: block;
+}
+
+.suggestion-item {
+    padding: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: background 200ms;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background-color: #f5f5f5;
+}
+
+.suggestion-image {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.suggestion-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.suggestion-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--jumia-dark);
+}
+
+.suggestion-price {
+    font-size: 12px;
+    color: var(--jumia-orange);
+    font-weight: 700;
+}
+
 /* Nav Actions */
 .nav-actions {
     display: flex;
@@ -252,6 +316,44 @@ button {
 }
 
 .nav-btn:hover {
+    color: var(--jumia-orange);
+}
+
+/* Account Dropdown */
+.nav-item-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    min-width: 180px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    z-index: 1000;
+    border-radius: 4px;
+    padding: 8px 0;
+    border: 1px solid var(--border-gray);
+}
+
+.nav-item-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-item {
+    color: var(--jumia-dark);
+    padding: 12px 20px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    transition: background 200ms;
+}
+
+.dropdown-item:hover {
+    background-color: var(--jumia-light-gray);
     color: var(--jumia-orange);
 }
 
@@ -419,6 +521,7 @@ button {
     object-fit: cover;
     display: block;
 }
+
 /* ===== SLIDE CONTENT ELEMENTS - RESPONSIVE ===== */
 .slide-badge {
     background: rgba(255, 255, 255, 0.2);
@@ -1510,7 +1613,7 @@ button {
     .header-utility {
         display: none;
     }
-    
+
     .hamburger {
         display: flex;
     }
@@ -1521,7 +1624,7 @@ button {
         max-width: none;
         margin-top: 12px;
     }
-    
+
     .nav-inner {
         flex-wrap: wrap;
     }
@@ -1529,12 +1632,12 @@ button {
     .nav-actions {
         order: 2;
     }
-    
+
     .account-btn,
     .help-btn {
         display: none;
     }
-    
+
     .hero-section {
         gap: 12px;
     }
@@ -1542,7 +1645,7 @@ button {
     .service-cards {
         flex-direction: column;
     }
-    
+
     .carousel-container {
         min-height: 280px;
     }
@@ -1552,12 +1655,12 @@ button {
         gap: 8px;
         padding: 12px;
     }
-    
+
     .tiles-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 8px;
     }
-    
+
     .footer-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1570,7 +1673,7 @@ button {
     .newsletter-form {
         width: 100%;
     }
-    
+
     .scroll-arrow {
         display: none;
     }
@@ -1580,7 +1683,7 @@ button {
     .announce-left {
         font-size: 11px;
     }
-    
+
     .announce-right {
         gap: 8px;
     }
@@ -1592,7 +1695,7 @@ button {
     .phone-number {
         font-size: 13px;
     }
-    
+
     .shop-now-btn {
         padding: 4px 12px;
         font-size: 11px;
@@ -1606,7 +1709,7 @@ button {
     .carousel-container {
         min-height: 240px;
     }
-    
+
     .slide-content {
         padding: 20px;
     }
@@ -1614,15 +1717,15 @@ button {
     .slide-title {
         font-size: 28px;
     }
-    
+
     .slide-subtitle {
         font-size: 20px;
     }
-    
+
     .product-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .tiles-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1641,16 +1744,16 @@ button {
     .banner-title {
         font-size: 32px;
     }
-    
+
     .footer-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .cart-panel {
         width: 100%;
         right: -100%;
     }
-    
+
     .mobile-drawer {
         width: 280px;
     }
@@ -1666,7 +1769,8 @@ button {
 /* ===== EXTRA SMALL DEVICES (320px - 375px) ===== */
 @media (max-width: 430px) {
     .announce-left {
-        display: none; /* Hide announcement on very small screens */
+        display: none;
+        /* Hide announcement on very small screens */
     }
 
     .announce-right {
@@ -1678,7 +1782,7 @@ button {
         font-size: 12px;
         padding: 0 10px;
     }
-    
+
     .search-btn {
         padding: 0 20px;
         font-size: 12px;
@@ -1687,11 +1791,11 @@ button {
     .carousel-container {
         min-height: 200px;
     }
-    
+
     .slide-content {
         padding: 15px;
     }
-    
+
     .slide-title {
         font-size: 22px;
     }
@@ -1712,7 +1816,7 @@ button {
     .product-price {
         font-size: 14px;
     }
-    
+
     .newsletter-text {
         font-size: 16px;
     }
@@ -2477,4 +2581,18 @@ button {
 
 .cart-count-bounce {
     animation: cartBounce 400ms ease-out;
+}
+
+/* Product Zoom */
+.product-zoom-container {
+    overflow: hidden;
+    border-radius: 8px;
+    cursor: crosshair;
+    position: relative;
+}
+
+.product-zoom-image {
+    width: 100%;
+    display: block;
+    transition: transform 0.1s ease-out;
 }

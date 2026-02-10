@@ -17,7 +17,7 @@ class RetailRowAPI {
     getAPIBaseURL() {
         // Check if running on production, staging, or local
         const hostname = window.location.hostname;
-        
+
         if (hostname === 'localhost' || hostname === '127.0.0.1') {
             // Local development
             return window.location.origin + '/RetailRow/api';
@@ -39,6 +39,8 @@ class RetailRowAPI {
 
         try {
             const url = `${this.baseURL}${endpoint}`;
+            console.log('API Request:', url, options); // Debug log
+
             const defaultOptions = {
                 headers: {
                     'Content-Type': 'application/json',
@@ -50,24 +52,35 @@ class RetailRowAPI {
             const response = await fetch(url, { ...defaultOptions, ...options });
             clearTimeout(timeoutId);
 
+            console.log('API Response Status:', response.status); // Debug log
+
+            // Try to parse JSON response
+            let data;
+            try {
+                data = await response.json();
+                console.log('API Response Data:', data); // Debug log
+            } catch (parseError) {
+                console.error('JSON Parse Error:', parseError);
+                throw new Error(`Server returned invalid JSON. Status: ${response.status}`);
+            }
+
+            // Check if response is OK (200-299)
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                // Throw error with message from server if available
+                throw new Error(data.message || `HTTP error! status: ${response.status}`);
             }
 
-            const data = await response.json();
-            
-            if (!data.success) {
-                throw new Error(data.message || 'API request failed');
-            }
-
+            // For successful responses, return the data as-is
+            // The data should already have 'success' property from PHP
             return data;
+
         } catch (error) {
             clearTimeout(timeoutId);
-            
+
             if (error.name === 'AbortError') {
                 throw new Error('Request timeout - please check your connection');
             }
-            
+
             console.error('API Error:', error);
             throw error;
         }

@@ -44,6 +44,34 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo htmlspecialchars($settings['site_title'] ?? 'RetailRow — Shop Quality Products at the Best Prices in Ghana'); ?></title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Dropdown styles for account menu */
+        .nav-item-dropdown {
+            position: relative;
+        }
+        .nav-item-dropdown .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            min-width: 180px;
+            border-radius: 4px;
+            padding: 8px 0;
+            border: 1px solid #eee;
+        }
+        .nav-item-dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        .dropdown-menu a.dropdown-item:hover {
+            background-color: #f5f5f5;
+        }
+        .dropdown-menu .dropdown-item {
+            white-space: nowrap;
+        }
+    </style>
 </head>
 
 <body>
@@ -97,25 +125,33 @@ try {
 
                 <!-- Search Bar -->
                 <div class="nav-search">
-                    <form class="search-form">
-                        <input type="search" placeholder="Search for products, brands and categories"
-                            aria-label="Search products">
+                    <form class="search-form" action="search.php" method="GET">
+                        <input type="search" id="searchInput" name="q" placeholder="Search for products, brands and categories"
+                            aria-label="Search products" value="<?php echo isset($_GET['q']) ? htmlspecialchars($_GET['q']) : ''; ?>" autocomplete="off" required>
                         <button type="submit" class="search-btn">SEARCH</button>
                     </form>
+                    <div id="searchSuggestions" class="search-suggestions"></div>
                 </div>
 
                 <!-- Right Nav Items -->
                 <div class="nav-actions">
-                    <button class="nav-btn account-btn">
-                        <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
-                            <path fill="currentColor"
-                                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                        </svg>
-                        <span>Account</span>
-                        <svg class="icon-arrow" viewBox="0 0 24 24" width="16" height="16">
-                            <path fill="currentColor" d="M7 10l5 5 5-5z" />
-                        </svg>
-                    </button>
+                    <div class="nav-item-dropdown" id="accountDropdownContainer">
+                        <a href="account.php" class="nav-btn account-btn" id="accountLink">
+                            <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+                                <path fill="currentColor"
+                                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                            </svg>
+                            <span id="accountText">Account</span>
+                            <svg class="icon-arrow" viewBox="0 0 24 24" width="16" height="16">
+                                <path fill="currentColor" d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </a>
+                        <div class="dropdown-menu" id="accountDropdownMenu">
+                            <a href="account.php" class="dropdown-item">Login</a>
+                            <a href="account.php#register" class="dropdown-item">Register</a>
+                            <a href="account.php#profile" class="dropdown-item">Profile</a>
+                        </div>
+                    </div>
 
                     <a href="help.php" class="nav-btn help-btn">
                         <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
@@ -281,6 +317,7 @@ try {
                 <div class="flash-products-wrapper">
                     <button class="scroll-arrow left" aria-label="Scroll left">‹</button>
                     <div class="flash-products" id="flashScroll">
+                        <a href="product.php?id=1" class="product-card-link">
                         <div class="product-card flash-product">
                             <div class="discount-badge">-25%</div>
                             <div class="product-image">
@@ -295,7 +332,9 @@ try {
                             </div>
                             <div class="stock-text">8 items left</div>
                         </div>
+                        </a>
 
+                        <a href="product.php?id=2" class="product-card-link">
                         <div class="product-card flash-product">
                             <div class="discount-badge">-25%</div>
                             <div class="product-image">
@@ -310,7 +349,9 @@ try {
                             </div>
                             <div class="stock-text">5 items left</div>
                         </div>
+                        </a>
 
+                        <a href="product.php?id=3" class="product-card-link">
                         <div class="product-card flash-product">
                             <div class="discount-badge">-46%</div>
                             <div class="product-image">
@@ -325,7 +366,9 @@ try {
                             </div>
                             <div class="stock-text">42 items left</div>
                         </div>
+                        </a>
 
+                        <a href="product.php?id=4" class="product-card-link">
                         <div class="product-card flash-product">
                             <div class="discount-badge">-15%</div>
                             <div class="product-image">
@@ -340,7 +383,9 @@ try {
                             </div>
                             <div class="stock-text">10 items left</div>
                         </div>
+                        </a>
 
+                        <a href="product.php?id=5" class="product-card-link">
                         <div class="product-card flash-product">
                             <div class="discount-badge">-42%</div>
                             <div class="product-image">
@@ -355,7 +400,9 @@ try {
                             </div>
                             <div class="stock-text">498 items left</div>
                         </div>
+                        </a>
 
+                        <a href="product.php?id=6" class="product-card-link">
                         <div class="product-card flash-product">
                             <div class="discount-badge">-46%</div>
                             <div class="product-image">
@@ -370,6 +417,7 @@ try {
                             </div>
                             <div class="stock-text">18 items left</div>
                         </div>
+                        </a>
                     </div>
                     <button class="scroll-arrow right" aria-label="Scroll right">›</button>
                 </div>
@@ -865,8 +913,34 @@ try {
     <button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
 
     <script>
+        // This function updates the header UI based on authentication status.
+        const updateAuthUI = (user) => {
+            const accountText = document.getElementById('accountText');
+            const accountDropdownMenu = document.getElementById('accountDropdownMenu');
+
+            if (user) {
+                // User is logged in
+                if (accountText) {
+                    // Display user's first name, fallback to 'Account'
+                    accountText.textContent = user.name ? user.name.split(' ')[0] : 'Account';
+                }
+                if (accountDropdownMenu) {
+                    accountDropdownMenu.innerHTML = `
+                        <a href="account.php" class="dropdown-item">My Account</a>
+                        <a href="account.php#profile" class="dropdown-item">Profile</a>
+                        <a href="account.php#orders" class="dropdown-item">Orders</a>
+                        <a href="#" onclick="auth.logout()" class="dropdown-item">Logout</a>
+                    `;
+                }
+            }
+            // If user is not logged in, the default HTML for the dropdown is already correct.
+        };
+
         // Dynamic data loading
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            const user = await auth.checkUser();
+            updateAuthUI(user);
+
             loadBanners();
             loadFlashSales();
             loadFeaturedProducts();
@@ -1109,6 +1183,8 @@ async function loadBanners() {
         }
     </script>
 
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
     <script src="js/main.js"></script>
     <script src="js/cart.js"></script>
 </body>
