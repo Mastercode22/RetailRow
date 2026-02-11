@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 
 session_start();
 
@@ -35,42 +35,23 @@ $stmt->execute();
 if ($stmt->rowCount() > 0) {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    // Check if user is active
     if ($user['status'] !== 'active') {
         http_response_code(403);
-        echo json_encode([
-            'success' => false,
-            'message' => 'Account is not active'
-        ]);
+        echo json_encode(['success' => false, 'message' => 'Account is not active']);
         exit;
     }
     
     if (password_verify($data['password'], $user['password'])) {
-        // Password correct
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_role'] = $user['role'];
         $_SESSION['user_name'] = $user['name'];
-        
-        // Remove password from response
         unset($user['password']);
-        
-        echo json_encode([
-            'success' => true,
-            'authenticated' => true,
-            'message' => 'Login successful',
-            'user' => $user
-        ]);
+        echo json_encode(['success' => true, 'authenticated' => true, 'message' => 'Login successful', 'user' => $user]);
     } else {
         http_response_code(401);
-        echo json_encode([
-            'success' => false,
-            'message' => 'Invalid credentials'
-        ]);
+        echo json_encode(['success' => false, 'message' => 'Invalid credentials']);
     }
 } else {
     http_response_code(401);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Invalid credentials'
-    ]);
+    echo json_encode(['success' => false, 'message' => 'Invalid credentials']);
 }

@@ -6,7 +6,7 @@ const auth = {
 
     checkUser: async () => {
         try {
-            const response = await api.request('/auth/me.php');
+            const response = await api.request('/me.php');
             if (response.success && response.authenticated) {
                 auth.user = response.user;
                 return response.user;
@@ -19,7 +19,7 @@ const auth = {
 
     login: async (email, password) => {
         try {
-            const response = await api.request('/auth/login.php', {
+            const response = await api.request('/login.php', {
                 method: 'POST',
                 body: JSON.stringify({ email, password })
             });
@@ -38,7 +38,7 @@ const auth = {
 
     register: async (name, email, password) => {
         try {
-            const response = await api.request('/auth/register.php', {
+            const response = await api.request('/register.php', {
                 method: 'POST',
                 body: JSON.stringify({ name, email, password })
             });
@@ -56,7 +56,7 @@ const auth = {
 
     logout: async () => {
         try {
-            await api.request('/auth/logout.php');
+            await api.request('/logout.php');
         } catch (e) {
             console.error('Logout error:', e);
         } finally {

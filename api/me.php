@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/../config/db.php';
 
 session_start();
 
@@ -15,23 +15,12 @@ if (isset($_SESSION['user_id'])) {
     
     if ($stmt->rowCount() > 0) {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        echo json_encode([
-            'success' => true,
-            'authenticated' => true,
-            'user' => $user
-        ]);
+        echo json_encode(['success' => true, 'authenticated' => true, 'user' => $user]);
     } else {
-        // User not found or inactive, destroy session
         session_unset();
         session_destroy();
-        echo json_encode([
-            'success' => true,
-            'authenticated' => false
-        ]);
+        echo json_encode(['success' => true, 'authenticated' => false]);
     }
 } else {
-    echo json_encode([
-        'success' => true,
-        'authenticated' => false
-    ]);
+    echo json_encode(['success' => true, 'authenticated' => false]);
 }

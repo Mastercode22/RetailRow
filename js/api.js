@@ -2,6 +2,7 @@
  * RetailRow API Service
  * Centralized API communication layer for frontend
  * Handles all backend requests with proper error handling and loading states
+ * Updated for Ngrok/Mobile compatibility
  */
 
 class RetailRowAPI {
@@ -15,18 +16,20 @@ class RetailRowAPI {
      * Get API base URL based on environment
      */
     getAPIBaseURL() {
-        // Check if running on production, staging, or local
         const hostname = window.location.hostname;
+        const origin = window.location.origin;
 
-        if (hostname === 'localhost' || hostname === '127.0.0.1') {
-            // Local development
-            return window.location.origin + '/RetailRow/api';
+        // Check if running on localhost OR via Ngrok tunnel
+        if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes('ngrok-free.app')) {
+            // Local development or Ngrok tunnel
+            // We ensure /RetailRow/api is appended for local folder structure
+            return origin + '/RetailRow/api';
         } else if (hostname.includes('staging') || hostname.includes('test')) {
             // Staging environment
-            return window.location.origin + '/api';
+            return origin + '/api';
         } else {
             // Production
-            return window.location.origin + '/api';
+            return origin + '/api';
         }
     }
 
@@ -45,9 +48,17 @@ class RetailRowAPI {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
+                    // CRITICAL: This skips the Ngrok "Visit Site" warning page 
+                    // which causes the "Invalid JSON" error on mobile devices.
+                    'ngrok-skip-browser-warning': 'true',
                 },
                 signal: controller.signal,
             };
+
+            // Merge provided headers with defaults
+            if (options.headers) {
+                options.headers = { ...defaultOptions.headers, ...options.headers };
+            }
 
             const response = await fetch(url, { ...defaultOptions, ...options });
             clearTimeout(timeoutId);
@@ -61,17 +72,15 @@ class RetailRowAPI {
                 console.log('API Response Data:', data); // Debug log
             } catch (parseError) {
                 console.error('JSON Parse Error:', parseError);
-                throw new Error(`Server returned invalid JSON. Status: ${response.status}`);
+                // If this triggers on mobile, it means Ngrok is still blocking with an HTML page
+                throw new Error(`Server returned invalid JSON. Status: ${response.status}. Please check your Ngrok tunnel.`);
             }
 
             // Check if response is OK (200-299)
             if (!response.ok) {
-                // Throw error with message from server if available
                 throw new Error(data.message || `HTTP error! status: ${response.status}`);
             }
 
-            // For successful responses, return the data as-is
-            // The data should already have 'success' property from PHP
             return data;
 
         } catch (error) {
@@ -180,7 +189,7 @@ class RetailRowAPI {
         return this.request('/homepage-sections.php');
     }
 
-    // ===== ORDERS API (Future) =====
+    // ===== ORDERS API =====
     async createOrder(orderData) {
         return this.request('/orders.php', {
             method: 'POST',
